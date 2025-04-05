@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Men's Clothing Categories</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .instructions {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .category {
+            background-color: #fff;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .category-title {
+            background-color: #34495e;
+            color: white;
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .subcategory {
+            padding: 0 15px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .subcategory.active {
+            max-height: 5000px;
+            transition: max-height 0.5s ease-in;
+        }
+        
+        .subcategory-title {
+            color: #2c3e50;
+            padding: 10px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .sub-subcategory {
+            padding: 0 15px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .sub-subcategory.active {
+            max-height: 5000px;
+            transition: max-height 0.5s ease-in;
+        }
+        
+        .sub-subcategory-title {
+            color: #3498db;
+            padding: 10px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 10px 0;
+        }
+        
+        .product {
+            background-color: #ecf0f1;
+            margin: 5px;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: calc(33.333% - 10px);
+            box-sizing: border-box;
+        }
+        
+        .product:hover {
+            background-color: #d6dbdf;
+        }
+        
+        .product.clicked-once {
+            background-color: #2ecc71; /* Green */
+            color: white;
+        }
+        
+        .product.clicked-twice {
+            background-color: #f1c40f; /* Yellow */
+            color: black;
+        }
+        
+        .arrow {
+            transition: transform 0.3s;
+        }
+        
+        .arrow.up {
+            transform: rotate(180deg);
+        }
+        
+        @media (max-width: 768px) {
+            .product {
+                width: calc(50% - 10px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .product {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Men's Clothing Categories</h1>
+    </header>
+    
+    <div class="instructions">
+        <h3>Instructions:</h3>
+        <p>Click on any product to change its color:</p>
+        <ul>
+            <li>First click: Changes to <span style="color: #2ecc71; font-weight: bold;">green</span></li>
+            <li>Second click: Changes to <span style="color: #f1c40f; font-weight: bold;">yellow</span></li>
+            <li>Third click: Returns to original color</li>
+        </ul>
+        <p>Click on category and subcategory titles to expand or collapse the sections.</p>
+    </div>
+    
+    <div id="categories-container">
+        <!-- Categories will be added here via JavaScript -->
+    </div>
+
+    <script>
+        // Data structure for the men's clothing categories
+        const menClothing = [
+            {
+                category: "Tops",
+                subcategories: [
+                    {
+                        name: "Outerwear",
+                        subSubcategories: [
+                            {
+                                name: "Jackets",
+                                products: [
+                                    "Leather Jacket", "Puffer Jacket", "Denim Jacket", "Bomber Jacket",
+                                    "Varsity Jacket", "Fleece Jacket", "Windbreaker Jacket", "Parka Jacket",
+                                    "Harrington Jacket", "Quilted Jacket", "Down Jacket", "Biker Jacket",
+                                    "Shearling Jacket", "Field Jacket", "Rain Jacket", "Technical Shell",
+                                    "Track Jacket", "Coach Jacket", "Mac Jacket", "Utility Jacket",
+                                    "Moto Jacket", "Suede Jacket", "Vest Jacket", "Chore Jacket",
+                                    "Canvas Jacket", "Anorak Jacket", "Trucker Jacket", "Thermal Jacket", "Others"
+                                ]
+                            },
+                            {
+                                name: "Coats",
+                                products: [
+                                    "Trench Coat", "Overcoat", "Peacoat", "Puffer Coat", "Wool Coat",
+                                    "Raincoat", "Blazer", "Long Coat", "Duffle Coat", "Chesterfield Coat",
+                                    "Topcoat", "Greatcoat", "Car Coat", "Mackintosh Coat", "Crombie Coat",
+                                    "Fur Coat", "Covert Coat", "Windcheater Coat", "Duster Coat", "Morning Dress",
+                                    "Tailcoat", "Waistcoat", "Cloak", "Lab Coat", "Others"
+                                ]
+                            },
+                            {
+                                name: "Hoodies",
+                                products: [
+                                    "Pullover Hoodie", "Zip-Up Hoodie", "Oversized Hoodie", "Athletic Hoodie",
+                                    "Colour Block Hoodie", "Fitted Hoodie", "Sleeveless Hoodie", "Raglan Hoodie",
+                                    "Flannel Hoodie", "Knitted Hoodie", "Baja Hoodie", "Others"
+                                ]
+                            },
+                            {
+                                name: "Sweaters",
+                                products: [
+                                    "Crew Neck Sweater", "V-Neck Sweater", "Turtleneck Sweater", "Cardigan",
+                                    "Quarter Zip Sweater", "Cable Knit Sweater", "Sweater Vest", "Roll Neck Sweater",
+                                    "Aran Sweater", "Shawl Collar Sweater", "Mock Neck Sweater", "Fisherman Sweater",
+                                    "Full Zip Sweater", "Hooded Sweater", "Fair Isle Sweater", "Henley Sweater", "Others"
+                                ]
+                            },
+                            {
+                                name: "Blazers",
+                                products: [
+                                    "Single-Breasted Blazer", "Double-Breasted Blazer", "Tailored Blazer", "Slim-Fit Blazer",
+                                    "Casual Blazer", "Formal Blazer", "Sports Blazer", "Oversized Blazer",
+                                    "Tuxedo Blazer", "Wool Blazer", "Linen Blazer", "Cotton Blazer",
+                                    "Checked Blazer", "Plaid Blazer", "Notch Lapel Blazer", "Peak Lapel Blazer",
+                                    "Shawl Collar Blazer", "Velvet Blazer", "Corduroy Blazer", "Houndstooth Blazer",
+                                    "Denim Blazer", "Leather Blazer", "Military Blazer", "Blazer Jacket",
+                                    "Blazer Vest", "Others"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        name: "Shirts",
+                        subSubcategories: [
+                            {
+                                name: "Casual Shirts",
+                                products: [
+                                    "Flannel Shirt", "Denim Shirt", "Linen Shirt", "Cuban Collar Shirt",
+                                    "Chambray Shirt", "Overshirt", "Band Collar Shirt", "Aloha Shirt", "Others"
+                                ]
+                            },
+                            {
+                                name: "Formal Shirts",
+                                products: [
+                                    "Dress Shirt", "Oxford Shirt", "Tuxedo Shirt", "Mandarin Collar Shirt",
+                                    "French Cuff Shirt", "Wingtip Shirt", "Others"
+                                ]
+                            },
+                            {
+                                name: "Polo Shirts",
+                                products: [
+                                    "Classic Polo", "Slim Fit Polo", "Sports Polo", "Pique Polo",
+                                    "Long Sleeve Polo", "Jersey Polo", "Printed Polo", "Striped Polo",
+                                    "Performance Polo", "Contrast Colour Polo", "Pocket Polo", "Tipped Polo",
+                                    "Vintage Polo", "Textured Polo", "Others"
+                                ]
+                            },
+                            {
+                                name: "T-Shirts",
+                                products: [
+                                    "Crew Neck T-Shirt", "V-Neck T-Shirt", "Short Sleeve T-Shirt", "Graphic T-Shirt",
+                                    "Long Sleeve T-Shirt", "Oversized T-Shirt", "Solid Color T-Shirt", "Henley T-Shirt",
+                                    "Striped T-Shirt", "Pocket T-Shirt", "Muscle Fit T-Shirt", "Raglan T-Shirt",
+                                    "Sleeveless T-Shirt", "High-Low Hem T-Shirt", "Others"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        name: "Others",
+                        products: []
+                    }
+                ]
+            },
+            {
+                category: "Bottoms",
+                subcategories: [
+                    {
+                        name: "Trousers",
+                        products: [
+                            "Chinos", "Slim-Fit Trousers", "Dress Trousers", "Straight-Leg Trousers",
+                            "Tailored Trousers", "Jogger Trousers", "Cargo Trousers", "Linen Trousers",
+                            "Tapered Trousers", "Pleated Trousers", "Wide-Leg Trousers", "Drawstring Trousers",
+                            "Bootcut Trousers", "Cuffed Trousers", "Corduroy Trousers", "Others"
+                        ]
+                    },
+                    {
+                        name: "Jeans",
+                        products: [
+                            "Skinny Jeans", "Slim-Fit Jeans", "Straight-Leg Jeans", "Distressed Jeans",
+                            "Relaxed-Fit Jeans", "Tapered Jeans", "High-Waisted Jeans", "Bootcut Jeans",
+                            "Straight-Cut Jeans", "Wide-Leg Jeans", "Baggy Jeans", "Low-Rise Jeans",
+                            "Carpenter Jeans", "Cropped Jeans", "Acid-Wash Jeans", "Others"
+                        ]
+                    },
+                    {
+                        name: "Shorts",
+                        products: [
+                            "Chino Shorts", "Denim Shorts", "Cargo Shorts", "Athletic Shorts",
+                            "Swim Shorts", "Bermuda Shorts", "Drawstring Shorts", "Board Shorts",
+                            "Walking Shorts", "Tailored Shorts", "Running Shorts", "Khaki Shorts",
+                            "Pleated Shorts", "Flat-Front Shorts", "Elastic Waist Shorts", "Others"
+                        ]
+                    },
+                    {
+                        name: "Others",
+                        products: []
+                    }
+                ]
+            },
+            {
+                category: "Footwear",
+                subcategories: [
+                    {
+                        name: "Formal Shoes",
+                        products: [
+                            "Oxford Shoes", "Derby Shoes", "Brogues", "Loafers",
+                            "Monk Strap Shoes", "Dress Boots", "Patent Leather Shoes", "Cap Toe Shoes",
+                            "Wingtip Shoes", "Wholecut Shoes", "Spectator Shoes", "Chelsea Boots",
+                            "Others"
+                        ]
+                    },
+                    {
+                        name: "Casual Shoes",
+                        products: [
+                            "Sneakers", "Slip-Ons", "Boat Shoes", "Moccasins",
+                            "Desert Boots", "Chukka Boots", "Espadrilles", "Canvas Shoes",
+                            "Driving Shoes", "Walking Shoes", "Sandals", "Flip Flops",
+                            "Others"
+                        ]
+                    },
+                    {
+                        name: "Athletic Shoes",
+                        products: [
+                            "Running Shoes", "Training Shoes", "Basketball Shoes", "Soccer Cleats",
+                            "Tennis Shoes", "Cross-Training Shoes", "Trail Running Shoes", "Hiking Boots",
+                            "Golf Shoes", "Cycling Shoes", "Weightlifting Shoes", "Skating Shoes",
+                            "Others"
+                        ]
+                    },
+                    {
+                        name: "Boots",
+                        products: [
+                            "Work Boots", "Hiking Boots", "Combat Boots", "Chelsea Boots",
+                            "Chukka Boots", "Desert Boots", "Dress Boots", "Winter Boots",
+                            "Motorcycle Boots", "Cowboy Boots", "Engineer Boots", "Trench Boots",
+                            "Others"
+                        ]
+                    },
+                    {
+                        name: "Others",
+                        products: []
+                    }
+                ]
+            },
+            {
+                category: "Accessories",
+                subcategories: [
+                    {
+                        name: "Belts",
+                        products: [
+                            "Leather Belt", "Braided Belt", "Canvas Belt", "Dress Belt",
+                            "Casual Belt", "Reversible Belt", "Stretch Belt", "Western Belt",
+                            "Others"
+                        ]
+                    },
+                    {
+                        name: "Ties",
+                        products: [
+                            "Silk Tie", "Knitted Tie", "Wool Tie", "Skinny Tie",
+                            "Wide Tie", "Bow Tie", "Clip-On Tie", "Novelty Tie",
+                            "Others"
+                        ]
+                    },
+                    {
+                        name: "Bags",
+                        products: [
+                            "Backpack", "Messenger Bag", "Briefcase", "Tote Bag",
+                            "Laptop Bag", "Duffle Bag", "Satchel", "Weekender Bag",
+                            "Travel Bag", "Gym Bag", "Others"
+                        ]
+                    },
+                    {
+                        name: "Hats & Caps",
+                        products: [
+                            "Baseball Cap", "Beanie", "Bucket Hat", "Fedora",
+                            "Trilby", "Flat Cap", "Snapback", "Trucker Hat",
+                            "Visor", "Sun Hat", "Others"
+                        ]
+                    },
+                    {
+                        name: "Watches",
+                        products: [
+                            "Dress Watch", "Dive Watch", "Chronograph", "Field Watch",
+                            "Pilot Watch", "Digital Watch", "Smart Watch", "Sport Watch",
+                            "Others"
+                        ]
+                    },
+                    {
+                        name: "Jewelry",
+                        products: [
+                            "Necklace", "Bracelet", "Ring", "Cufflinks",
+                            "Earrings", "Brooch", "Tie Bar", "Lapel Pin",
+                            "Others"
+                        ]
+                    },
+                    {
+                        name: "Others",
+                        products: [
+                            "Wallet", "Card Holder", "Sunglasses", "Gloves",
+                            "Scarf", "Handkerchief", "Pocket Square", "Umbrella",
+                            "Phone Case", "Key Chain", "Others"
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // Function to create the HTML structure
+        function createCategoriesStructure() {
+            const container = document.getElementById('categories-container');
+            
+            menClothing.forEach(categoryData => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                
+                // Create category title
+                const categoryTitle = document.createElement('div');
+                categoryTitle.className = 'category-title';
+                categoryTitle.innerHTML = `
+                    ${categoryData.category}
+                    <span class="arrow">▼</span>
+                `;
+                categoryTitle.addEventListener('click', function() {
+                    const subcategoryContainer = this.nextElementSibling;
+                    subcategoryContainer.classList.toggle('active');
+                    this.querySelector('.arrow').classList.toggle('up');
+                });
+                
+                // Create subcategory container
+                const subcategoryContainer = document.createElement('div');
+                subcategoryContainer.className = 'subcategory';
+                
+                // Create subcategories
+                categoryData.subcategories.forEach(subcategoryData => {
+                    // Check if it has sub-subcategories
+                    if (subcategoryData.subSubcategories) {
+                        // Create subcategory with sub-subcategories
+                        const subcategoryDiv = document.createElement('div');
+                        
+                        const subcategoryTitle = document.createElement('div');
+                        subcategoryTitle.className = 'subcategory-title';
+                        subcategoryTitle.innerHTML = `
+                            ${subcategoryData.name}
+                            <span class="arrow">▼</span>
+                        `;
+                        subcategoryTitle.addEventListener('click', function() {
+                            const subSubcategoryContainer = this.nextElementSibling;
+                            subSubcategoryContainer.classList.toggle('active');
+                            this.querySelector('.arrow').classList.toggle('up');
+                        });
+                        
+                        const subSubcategoryContainer = document.createElement('div');
+                        subSubcategoryContainer.className = 'sub-subcategory';
+                        
+                        subcategoryData.subSubcategories.forEach(subSubcategoryData => {
+                            const subSubcategoryDiv = document.createElement('div');
+                            
+                            const subSubcategoryTitle = document.createElement('div');
+                            subSubcategoryTitle.className = 'sub-subcategory-title';
+                            subSubcategoryTitle.innerHTML = `
+                                ${subSubcategoryData.name}
+                                <span class="arrow">▼</span>
+                            `;
+                            subSubcategoryTitle.addEventListener('click', function() {
+                                const productContainer = this.nextElementSibling;
+                                productContainer.style.display = productContainer.style.display === 'none' ? 'flex' : 'none';
+                                this.querySelector('.arrow').classList.toggle('up');
+                            });
+                            
+                            const productContainer = document.createElement('div');
+                            productContainer.className = 'product-container';
+                            productContainer.style.display = 'none';
+                            
+                            subSubcategoryData.products.forEach(product => {
+                                const productDiv = document.createElement('div');
+                                productDiv.className = 'product';
+                                productDiv.textContent = product;
+                                productDiv.addEventListener('click', toggleProductColor);
+                                productContainer.appendChild(productDiv);
+                            });
+                            
+                            subSubcategoryDiv.appendChild(subSubcategoryTitle);
+                            subSubcategoryDiv.appendChild(productContainer);
+                            subSubcategoryContainer.appendChild(subSubcategoryDiv);
+                        });
+                        
+                        subcategoryDiv.appendChild(subcategoryTitle);
+                        subcategoryDiv.appendChild(subSubcategoryContainer);
+                        subcategoryContainer.appendChild(subcategoryDiv);
+                    } else {
+                        // Create subcategory without sub-subcategories
+                        const subcategoryDiv = document.createElement('div');
+                        
+                        const subcategoryTitle = document.createElement('div');
+                        subcategoryTitle.className = 'subcategory-title';
+                        subcategoryTitle.innerHTML = `
+                            ${subcategoryData.name}
+                            <span class="arrow">▼</span>
+                        `;
+                        subcategoryTitle.addEventListener('click', function() {
+                            const productContainer = this.nextElementSibling;
+                            productContainer.style.display = productContainer.style.display === 'none' ? 'flex' : 'none';
+                            this.querySelector('.arrow').classList.toggle('up');
+                        });
+                        
+                        const productContainer = document.createElement('div');
+                        productContainer.className = 'product-container';
+                        productContainer.style.display = 'none';
+                        
+                        subcategoryData.products.forEach(product => {
+                            const productDiv = document.createElement('div');
+                            productDiv.className = 'product';
+                            productDiv.textContent = product;
+                            productDiv.addEventListener('click', toggleProductColor);
+                            productContainer.appendChild(productDiv);
+                        });
+                        
+                        subcategoryDiv.appendChild(subcategoryTitle);
+                        subcategoryDiv.appendChild(productContainer);
+                        subcategoryContainer.appendChild(subcategoryDiv);
+                    }
+                });
+                
+                categoryDiv.appendChild(categoryTitle);
+                categoryDiv.appendChild(subcategoryContainer);
+                container.appendChild(categoryDiv);
+            });
+        }
+        
+        // Function to toggle product color on click
+        function toggleProductColor() {
+            if (this.classList.contains('clicked-once')) {
+                // If already clicked once, change to yellow (clicked twice)
+                this.classList.remove('clicked-once');
+                this.classList.add('clicked-twice');
+            } else if (this.classList.contains('clicked-twice')) {
+                // If already clicked twice, remove both classes to return to original
+                this.classList.remove('clicked-twice');
+            } else {
+                // If not clicked yet, add clicked-once class to turn green
+                this.classList.add('clicked-once');
+            }
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            createCategoriesStructure();
+        });
+    </script>
+</body>
+</html>
